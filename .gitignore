@@ -23,5 +23,7 @@ gbq/
 *.json
 .env
 
+analises_5/
+
 .DS_Store
 Thumbs.db
