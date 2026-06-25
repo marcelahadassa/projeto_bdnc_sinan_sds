@@ -3,7 +3,7 @@ import pandas as pd
 
 #%%
 # arquivos
-df_viol = pd.read_excel("../new_data/BASE_SINAN_TRATADA_MUNICIP.xlsx")
+df_viol = pd.read_excel("../new_data/BASE_SINAN_COMPLETA_MUNICIP.xlsx")
 df_cnes = pd.read_excel("../data/raw/estabelecimentos_PE_filtrados.xlsx")
 
 # %%
@@ -43,5 +43,6 @@ df_merge = df_merge.drop(columns=colunas_para_remover, errors="ignore")
 df_merge.head(10)
 
 # %%
-df_merge.to_excel("../new_data/BASE_TRATADA_SINAN_UNIDADES.xlsx", index=False)
+# salvamento
+df_merge.to_parquet("../new_data/BASE_COMPLETA_SINAN_UNIDADES.parquet", index=False)
 # %%

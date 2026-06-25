@@ -3,7 +3,7 @@ import pandas as pd
 
 #%%
 # arquivos
-df = pd.read_excel("../new_data/BASE_SINAN_TRATADA.xlsx")  
+df = pd.read_parquet("../new_data/BASE_SINAN_COMPLETA.parquet")  
 df_municipios = pd.read_csv("../data/raw/municipios.csv")
 
 # %%
@@ -41,5 +41,5 @@ for col in cols:
 df.head(20)
 
 # %%
-df.to_excel("../new_data/BASE_SINAN_TRATADA_MUNICIP.xlsx", index=False)
+df.to_parquet("../new_data/BASE_SINAN_COMPLETA_MUNICIP.parquet", index=False)
 # %%

@@ -3,12 +3,10 @@ import pandas as pd
 import numpy as np
 
 # leitura da base do SDS
-print("Carregando base bruta da SDS...")
 df_sds = pd.read_excel('../data/raw/MICRO_DADOS_VIOL_DOM.xlsx')
 
 # mapeando as colunas de interesse para o padrão do SINAN
-print("Mapeando naturezas da ocorrência para os padrões do SINAN...")
-
+# %%
 colunas_violencia = ['VIOL_FISIC', 'VIOL_PSICO', 'VIOL_TORT', 'VIOL_SEXU', 
                      'VIOL_TRAF', 'VIOL_FINAN', 'VIOL_NEGLI', 'VIOL_INFAN']
 colunas_agressao = ['AG_FORCA', 'AG_ENFOR', 'AG_OBJETO', 'AG_CORTE', 
@@ -36,6 +34,7 @@ crimes_sexuais = [
 ]
 
 # inicialização com NAO
+#%%
 for coluna in todas_colunas_sinan:
     df_sds[coluna] = 'NAO'
 
@@ -50,12 +49,14 @@ df_sds['SEX_ESTUPR'] = np.where(df_sds['NATUREZA'].isin(crimes_sexuais), 'SIM', 
 
 # padronizando faixa etária e sexo
 
+#%%
 # remoção de prefixos numéricos como "1) ", "2) "
 df_sds['FAIXA_ETARIA_SDS'] = df_sds['FAIXA_ETARIA_SDS'].str.replace(r'^\d+\)\s*', '', regex=True)
 
 # primeira letra do sexo e converte para maiúscula (F)
 df_sds['SEXO'] = df_sds['SEXO'].str[0].str.upper()
 
+#%%
 # deduplicação de registros exatos
 linhas_iniciais = df_sds.shape[0]
 quantidade_duplicatas = df_sds.duplicated().sum()
@@ -70,6 +71,7 @@ if quantidade_duplicatas > 0:
 else:
     print("Nenhuma duplicata encontrada.")
 
+#%%
 # verificação
 print("\nAmostra dos dados finais:")
 print(df_sds[['FAIXA_ETARIA_SDS', 'SEXO']].head())
@@ -77,6 +79,7 @@ print("\nValores únicos de Sexo:", df_sds['SEXO'].unique())
 print("Valores únicos de Idade:", df_sds['FAIXA_ETARIA_SDS'].unique())
 print(f"Total de registros finais: {df_sds.shape[0]}")
 
+#%%
 # criação do ID do SDS
 print("\nGerando IDs numéricos únicos para a base limpa da SDS...")
 
@@ -89,6 +92,7 @@ print(f"Último ID gerado: {df_sds['ID_SDS'].iloc[-1]}")
 # type casting para garantir consistência de tipos de dados
 print("\nAplicando tipagem estrita nas colunas antes de salvar...")
 
+#%%
 # tratamento de colunas de texto: converte para string e substitui 'nan' por None
 colunas_texto = ['SEXO', 'FAIXA_ETARIA_SDS', 'NATUREZA', 'MUNICIPIO'] + todas_colunas_sinan
 for col in colunas_texto:
@@ -101,9 +105,11 @@ for col in colunas_data_possiveis:
     if col in df_sds.columns:
         df_sds[col] = pd.to_datetime(df_sds[col], errors='coerce')
 
+#%%
+df_sds.head(10)
+#%%
 # salvamento 
-caminho_final = '../new_data/SDS_PRE_CRUZAMENTO.parquet'
-print(f"\nSalvando base SDS preparada e tipada em: {caminho_final}...")
+caminho_final = '../new_data/BASE_COMPLETA_SDS_PRE_CRUZAMENTO.parquet'
 
 # salvamento do df_sds para parquet
 df_sds.to_parquet(caminho_final, index=False)

@@ -3,8 +3,8 @@ import pandas as pd
 
 #%%
 # leitura das bases de dados
-df_sinan = pd.read_parquet('../new_data//BASE_SINAN_TRATADA_PRE_CRUZAMENTO.parquet')
-df_sds = pd.read_parquet('../new_data/SDS_PRE_CRUZAMENTO.parquet')
+df_sinan = pd.read_parquet('../new_data/BASE_SINAN_COMPLETA_PRE_CRUZAMENTO.parquet')
+df_sds = pd.read_parquet('../new_data/BASE_COMPLETA_SDS_PRE_CRUZAMENTO.parquet')
 
 #%%
 # conversão para datetime da coluna de data de ocorrência na planilha do SDS)
@@ -54,6 +54,6 @@ sinan_agrupado = df_sinan.groupby(
 ).size().reset_index(name='TOTAL_CASOS_SINAN')
 #%%
 # salvamento em parquet
-df_sinan.to_parquet('../new_data/BASE_SINAN_TRATADA_FINAL.parquet', index=False)
-df_sds.to_parquet('../new_data/BASE_SDS_TRATADA_FINAL.parquet', index=False)
+df_sinan.to_parquet('../new_data/BASE_SINAN_FINAL.parquet', index=False)
+df_sds.to_parquet('../new_data/BASE_SDS_FINAL.parquet', index=False)
 #%%

@@ -274,7 +274,7 @@ df_feminino_pe = df_feminino_pe.fillna("DADO NÃO INFORMADO")
 # %%
 df_feminino_pe.head(10)
 # %%
-df_feminino_pe.to_excel("../new_data/BASE_SINAN_TRATADA_teste.xlsx", index=False)
+df_feminino_pe.to_parquet("../new_data/BASE_SINAN_COMPLETA.parquet", index=False)
 # %%
 contagem_linhas1 = df_feminino_pe.shape[0]
 print(contagem_linhas1)

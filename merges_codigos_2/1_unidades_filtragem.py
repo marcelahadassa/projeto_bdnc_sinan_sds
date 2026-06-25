@@ -36,4 +36,4 @@ df_cnes = df_cnes.rename(columns={
 
 df_cnes.head()
 # %%
-df_cnes.to_excel("estabelecimentos_PE_filtrados.xlsx", index=False)
+df_cnes.to_parquet("estabelecimentos_PE_filtrados.parquet", index=False)

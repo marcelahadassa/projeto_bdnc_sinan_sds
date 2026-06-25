@@ -3,12 +3,12 @@ import pandas as pd
 import numpy as np
 import unicodedata
 
+#%%
 # leitura da base do SINAN
-print("Carregando base unificada do SINAN...")
-df_sinan = pd.read_excel('../new_data/BASE_TRATADA_SINAN_UNIDADES.xlsx')
+df_sinan = pd.read_parquet('../new_data/BASE_COMPLETA_SINAN_UNIDADES.parquet')
 
 # criação da faixa etária se baseando na base do SDS (para padronização de cruzamento)
-
+#%%
 # extração da parte numérica da coluna IDADE_REAL e conversão para float
 df_sinan['IDADE_NUMERICA'] = df_sinan['IDADE_REAL'].str.extract(r'(\d+)').astype(float)
 
@@ -32,7 +32,7 @@ coluna_faixa_etaria = df_sinan.pop('FAIXA_ETARIA_SDS')
 df_sinan.insert(posicao_idade_real + 1, 'FAIXA_ETARIA_SDS', coluna_faixa_etaria)
 
 # padronização de nomes de municípios (remoção de acentos, conversão para maiúsculas e remoção de espaços extras)
-
+#%%
 # função para remover acentos e caracteres especiais
 def remover_acentos(texto):
     if texto is None or not isinstance(texto, str):
@@ -51,7 +51,7 @@ for col in colunas_municipios:
         df_sinan[col] = df_sinan[col].apply(remover_acentos).str.upper().str.strip()
 
 # type casting para garantir consistência de tipos de dados
-
+#%%
 # conversão de data para datetime
 colunas_de_data = ['DT_NOTIFIC', 'DT_OCOR']
 for col in colunas_de_data:
@@ -70,9 +70,12 @@ for col in colunas_texto:
     if col in df_sinan.columns:
         df_sinan[col] = df_sinan[col].astype(str).replace('nan', None)
 
+#%%
+df_sinan.head(10)
+
+#%%
 # salvamento
-caminho_final = '../new_data/BASE_SINAN_TRATADA_PRE_CRUZAMENTO.parquet'
-print(f"Salvando base preparada e tipada em: {caminho_final}...")
+caminho_final = '../new_data/BASE_SINAN_COMPLETA_PRE_CRUZAMENTO.parquet'
 
 # salvamento do df_sinan em parquet
 df_sinan.to_parquet(caminho_final, index=False)
