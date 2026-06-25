@@ -3,3 +3,4 @@ numpy
 openpyxl  
 pyarrow       
 dbfread 
+pandas-gbq
