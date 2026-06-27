@@ -1,6 +1,10 @@
 pandas
 numpy
-openpyxl  
-pyarrow       
-dbfread 
-pandas-gbq
+pyarrow
+openpyxl
+duckdb
+dagster
+dagster-webserver
+requests
+dbfread
+datasus-dbc

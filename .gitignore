@@ -7,23 +7,14 @@ planilhas_parquet/
 *.dbf
 *.dbc
 
-media/
-new_media/
-*.png
-*.jpg
-*.pdf
-
 venv/
 .env/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-gbq/
-*.json
-.env
-
-analises_5/
+docs/
 
 .DS_Store
 Thumbs.db
+
