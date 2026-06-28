@@ -55,11 +55,15 @@ projeto_bdnc_sinan_sds/
 
 ## Instalação
 
+
+
 ```bash
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 ```
+> **Importante:** O projeto foi desenvolvido e testado com Python 3.11.
+> Versões mais recentes (como Python 3.13) podem apresentar incompatibilidades com algumas dependências, como a biblioteca `datasus_dbc`.
 
 ## Execução com Dagster
 
