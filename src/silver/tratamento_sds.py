@@ -287,25 +287,25 @@ def padronizar_data(valor):
 # %%
 def padronizar_total_vitimas(valor):
     """
-    Padroniza o total de vítimas.
+    Padroniza o total de vítimas como número inteiro.
     """
 
     # Trata inválidos
     if normalizar_valor_invalido(valor) == VALOR_NAO_INFORMADO:
-        return VALOR_NAO_INFORMADO
+        return pd.NA
 
     # Tenta converter para inteiro
     try:
         total = int(float(valor))
     except (ValueError, TypeError):
-        return VALOR_NAO_INFORMADO
+        return pd.NA
 
     # Total menor ou igual a zero não é útil
     if total <= 0:
-        return VALOR_NAO_INFORMADO
+        return pd.NA
 
-    # Retorna como texto
-    return str(total)
+    # Retorna como inteiro
+    return total
 
 
 # %%
@@ -542,12 +542,8 @@ def tratar_sds():
     # Padroniza data do fato
     df_sds["DATA_FATO"] = df_sds["DATA_FATO"].apply(padronizar_data)
 
-    # Padroniza ano
-    df_sds["ANO"] = df_sds["ANO_NUM"].astype("Int64").astype(str)
-    df_sds["ANO"] = df_sds["ANO"].replace(
-        ["<NA>", "nan", "NaN", "None"],
-        VALOR_NAO_INFORMADO
-    )
+    # Padroniza ano como inteiro nullable
+    df_sds["ANO"] = df_sds["ANO_NUM"].astype("Int64")
 
     # Remove coluna auxiliar
     df_sds = df_sds.drop(columns=["ANO_NUM"])
@@ -555,8 +551,12 @@ def tratar_sds():
     # Padroniza faixa etária SDS
     df_sds["FAIXA_ETARIA_SDS"] = df_sds["FAIXA_ETARIA_SDS"].apply(padronizar_faixa_etaria_sds)
 
-    # Padroniza total de vítimas
-    df_sds["TOTAL_VITIMAS"] = df_sds["TOTAL_VITIMAS"].apply(padronizar_total_vitimas)
+    # Padroniza total de vítimas como inteiro nullable
+    df_sds["TOTAL_VITIMAS"] = (
+        df_sds["TOTAL_VITIMAS"]
+        .apply(padronizar_total_vitimas)
+        .astype("Int64")
+    )
 
     # Cria colunas equivalentes ao SINAN a partir da natureza
     df_sds, todas_colunas_sinan = criar_colunas_sinan_por_natureza(df_sds)
@@ -593,11 +593,21 @@ def tratar_sds():
     # Cria ID único da SDS
     df_sds.insert(0, "ID_SDS", range(1, len(df_sds) + 1))
 
-    # Padroniza valores inválidos em todas as colunas finais
+    # Padroniza valores inválidos em todas as colunas finais,
+    # sem converter colunas numéricas para texto
     df_sds = normalizar_dataframe_final(
         df_sds,
-        colunas_excecao=["ID_SDS"]
+        colunas_excecao=[
+            "ID_SDS",
+            "ANO",
+            "TOTAL_VITIMAS",
+        ]
     )
+
+    # Garante os tipos numéricos finais antes de salvar em Parquet
+    df_sds["ID_SDS"] = df_sds["ID_SDS"].astype("Int64")
+    df_sds["ANO"] = df_sds["ANO"].astype("Int64")
+    df_sds["TOTAL_VITIMAS"] = df_sds["TOTAL_VITIMAS"].astype("Int64")
 
     # Define o caminho de saída
     caminho_saida = SDS_SILVER / "base_sds_tratada.parquet"

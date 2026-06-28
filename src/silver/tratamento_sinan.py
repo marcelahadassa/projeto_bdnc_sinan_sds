@@ -936,6 +936,22 @@ def tratar_sinan():
         colunas_zero_valido=["IDADE_NUMERICA_EM_ANOS"]
     )
 
+    # Garante tipos numéricos reais na base Silver do SINAN
+    # Mantém como texto apenas códigos, categorias e descrições
+    colunas_inteiras = [
+        "ID_SINAN",
+        "NU_ANO",
+        "ANO_NASC",
+        "IDADE_NUMERICA_EM_ANOS",
+    ]
+
+    for coluna in colunas_inteiras:
+        if coluna in df_sinan.columns:
+            df_sinan[coluna] = pd.to_numeric(
+                df_sinan[coluna],
+                errors="coerce"
+            ).astype("Int64")
+
     # Define o caminho de saída
     caminho_saida = SINAN_SILVER / "base_sinan_tratada.parquet"
 

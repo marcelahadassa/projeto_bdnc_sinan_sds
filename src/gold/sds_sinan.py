@@ -177,7 +177,13 @@ def preparar_sinan_para_gold(df_sinan):
 
     # Padroniza chaves para cruzamento
     df["MUNICIPIO"] = df["MUNICIPIO_OCORRENCIA"].apply(normalizar_chave)
-    df["ANO"] = df["NU_ANO"].apply(normalizar_chave)
+
+    # Mantém ANO como número para não prejudicar análises temporais
+    df["ANO"] = pd.to_numeric(
+        df["NU_ANO"],
+        errors="coerce"
+    ).astype("Int64")
+
     df["SEXO"] = df["SEXO"].apply(normalizar_chave)
     df["FAIXA_ETARIA_SDS"] = df["FAIXA_ETARIA_SDS"].apply(normalizar_chave)
 
@@ -257,7 +263,13 @@ def preparar_sds_para_gold(df_sds):
 
     # Padroniza chaves para cruzamento
     df["MUNICIPIO"] = df["MUNICIPIO"].apply(normalizar_chave)
-    df["ANO"] = df["ANO"].apply(normalizar_chave)
+
+    # Mantém ANO como número para não prejudicar análises temporais
+    df["ANO"] = pd.to_numeric(
+        df["ANO"],
+        errors="coerce"
+    ).astype("Int64")
+
     df["SEXO"] = df["SEXO"].apply(normalizar_chave)
     df["FAIXA_ETARIA_SDS"] = df["FAIXA_ETARIA_SDS"].apply(normalizar_chave)
     df["REGIAO_GEOGRAFICA"] = df["REGIAO_GEOGRAFICA"].apply(normalizar_chave)
@@ -361,6 +373,23 @@ def cruzar_sds_sinan(df_sinan_agg, df_sds_agg):
     df_gold["DIF_TOTAL_SDS_MENOS_SINAN"] = (
         df_gold["TOTAL_VITIMAS_SDS"] - df_gold["TOTAL_REGISTROS_SINAN"]
     )
+
+    # Garante que ANO permaneça numérico na base Gold
+    df_gold["ANO"] = pd.to_numeric(
+        df_gold["ANO"],
+        errors="coerce"
+    )
+
+    # Se houver ano inválido, interrompe para não gerar análise temporal incorreta
+    total_anos_invalidos = df_gold["ANO"].isna().sum()
+
+    if total_anos_invalidos > 0:
+        raise ValueError(
+            f"Foram encontrados {total_anos_invalidos} registros com ANO inválido na Gold."
+        )
+
+    # Converte ANO para inteiro nullable, lido como BIGINT no DuckDB
+    df_gold["ANO"] = df_gold["ANO"].astype("Int64")
 
     # Reordena colunas principais
     colunas_principais = [

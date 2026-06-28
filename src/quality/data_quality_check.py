@@ -104,8 +104,8 @@ def check_bronze_sinan_dbc_extraidos():
     anos = list(range(14, 25))
 
     arquivos_esperados = [
-        SINAN_BRONZE / f"VIOLBR{ano}.dbc"
-        for ano in anos
+    SINAN_BRONZE / "dbc" / f"VIOLBR{ano}.dbc"
+    for ano in anos
     ]
 
     arquivos_faltantes = [
@@ -128,6 +128,7 @@ def check_bronze_sinan_dbc_extraidos():
             "total_arquivos_esperados": len(arquivos_esperados),
             "arquivos_faltantes": str(arquivos_faltantes),
             "arquivos_vazios": str(arquivos_vazios),
+            "pasta_verificada": str(SINAN_BRONZE / "dbc"),
         },
     )
 
@@ -792,6 +793,10 @@ def check_gold_tem_linhas():
 def check_gold_chaves_sem_nulos():
     """
     Confere se as chaves principais da Gold não possuem nulos reais.
+
+    Observação:
+    ANO é uma coluna numérica na Gold, então não deve ser comparada
+    diretamente com o texto DADO NÃO INFORMADO.
     """
 
     caminho_gold = SDS_SINAN_GOLD / "sds_sinan_final.parquet"
@@ -816,7 +821,6 @@ def check_gold_chaves_sem_nulos():
                       OR SEXO IS NULL
                       OR FAIXA_ETARIA_SDS IS NULL
                       OR TRIM(CAST(MUNICIPIO AS VARCHAR)) = ''
-                      OR TRIM(CAST(ANO AS VARCHAR)) = ''
                       OR TRIM(CAST(SEXO AS VARCHAR)) = ''
                       OR TRIM(CAST(FAIXA_ETARIA_SDS AS VARCHAR)) = ''
                     THEN 1
@@ -826,10 +830,9 @@ def check_gold_chaves_sem_nulos():
 
             SUM(
                 CASE
-                    WHEN MUNICIPIO = '{VALOR_NAO_INFORMADO}'
-                      OR ANO = '{VALOR_NAO_INFORMADO}'
-                      OR SEXO = '{VALOR_NAO_INFORMADO}'
-                      OR FAIXA_ETARIA_SDS = '{VALOR_NAO_INFORMADO}'
+                    WHEN CAST(MUNICIPIO AS VARCHAR) = '{VALOR_NAO_INFORMADO}'
+                      OR CAST(SEXO AS VARCHAR) = '{VALOR_NAO_INFORMADO}'
+                      OR CAST(FAIXA_ETARIA_SDS AS VARCHAR) = '{VALOR_NAO_INFORMADO}'
                     THEN 1
                     ELSE 0
                 END

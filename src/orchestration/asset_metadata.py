@@ -15,7 +15,7 @@ SILVER_SINAN_METADATA = {
         columns=[
             dg.TableColumn(
                 "ID_SINAN",
-                "INTEGER",
+                "BIGINT",
                 description="Identificador único criado para cada registro tratado do SINAN."
             ),
             dg.TableColumn(
@@ -25,7 +25,7 @@ SILVER_SINAN_METADATA = {
             ),
             dg.TableColumn(
                 "NU_ANO",
-                "VARCHAR",
+                "BIGINT",
                 description="Ano do registro do SINAN."
             ),
             dg.TableColumn(
@@ -50,7 +50,7 @@ SILVER_SINAN_METADATA = {
             ),
             dg.TableColumn(
                 "IDADE_NUMERICA_EM_ANOS",
-                "VARCHAR",
+                "BIGINT",
                 description="Idade convertida para anos. Horas, dias e meses são representados como 0."
             ),
             dg.TableColumn(
@@ -110,7 +110,7 @@ SILVER_SDS_METADATA = {
         columns=[
             dg.TableColumn(
                 "ID_SDS",
-                "INTEGER",
+                "BIGINT",
                 description="Identificador único criado para cada registro tratado da SDS."
             ),
             dg.TableColumn(
@@ -135,7 +135,7 @@ SILVER_SDS_METADATA = {
             ),
             dg.TableColumn(
                 "ANO",
-                "VARCHAR",
+                "BIGINT",
                 description="Ano do fato."
             ),
             dg.TableColumn(
@@ -150,7 +150,7 @@ SILVER_SDS_METADATA = {
             ),
             dg.TableColumn(
                 "TOTAL_VITIMAS",
-                "VARCHAR",
+                "BIGINT",
                 description="Total de vítimas representadas pelo registro."
             ),
             dg.TableColumn(
@@ -200,7 +200,7 @@ GOLD_SDS_SINAN_METADATA = {
             ),
             dg.TableColumn(
                 "ANO",
-                "VARCHAR",
+                "BIGINT",
                 description="Ano de referência da agregação."
             ),
             dg.TableColumn(
@@ -215,62 +215,62 @@ GOLD_SDS_SINAN_METADATA = {
             ),
             dg.TableColumn(
                 "TOTAL_REGISTROS_SINAN",
-                "INTEGER",
+                "BIGINT",
                 description="Total de registros do SINAN agregados na chave."
             ),
             dg.TableColumn(
                 "TOTAL_REGISTROS_SDS",
-                "INTEGER",
+                "BIGINT",
                 description="Total de registros da SDS agregados na chave."
             ),
             dg.TableColumn(
                 "TOTAL_VITIMAS_SDS",
-                "INTEGER",
+                "BIGINT",
                 description="Total de vítimas da SDS agregadas na chave."
             ),
             dg.TableColumn(
                 "DIF_TOTAL_SDS_MENOS_SINAN",
-                "INTEGER",
+                "BIGINT",
                 description="Diferença entre o total de vítimas da SDS e o total de registros do SINAN."
             ),
             dg.TableColumn(
                 "SINAN_VIOL_FISIC",
-                "INTEGER",
+                "BIGINT",
                 description="Total de registros do SINAN classificados como violência física."
             ),
             dg.TableColumn(
                 "SDS_VIOL_FISIC",
-                "INTEGER",
+                "BIGINT",
                 description="Total de vítimas da SDS associadas à violência física."
             ),
             dg.TableColumn(
                 "SINAN_VIOL_PSICO",
-                "INTEGER",
+                "BIGINT",
                 description="Total de registros do SINAN classificados como violência psicológica."
             ),
             dg.TableColumn(
                 "SDS_VIOL_PSICO",
-                "INTEGER",
+                "BIGINT",
                 description="Total de vítimas da SDS associadas à violência psicológica."
             ),
             dg.TableColumn(
                 "SINAN_VIOL_SEXU",
-                "INTEGER",
+                "BIGINT",
                 description="Total de registros do SINAN classificados como violência sexual."
             ),
             dg.TableColumn(
                 "SDS_VIOL_SEXU",
-                "INTEGER",
+                "BIGINT",
                 description="Total de vítimas da SDS associadas à violência sexual."
             ),
             dg.TableColumn(
                 "SINAN_VIOL_FINAN",
-                "INTEGER",
+                "BIGINT",
                 description="Total de registros do SINAN classificados como violência financeira/patrimonial."
             ),
             dg.TableColumn(
                 "SDS_VIOL_FINAN",
-                "INTEGER",
+                "BIGINT",
                 description="Total de vítimas da SDS associadas à violência financeira/patrimonial."
             ),
         ]
