@@ -158,8 +158,17 @@ Arquivo Gold:
 data/gold/sds_sinan/sds_sinan_final.parquet
 ```
 
-Tabela principal no DuckDB:
+Tabelas principais no DuckDB:
 
 ```text
-gold.sds_sinan
+gold.sds_sinan   → tabela final integrada entre SDS e SINAN
+silver.sds       → tabela tratada da SDS
+silver.sinan     → tabela tratada do SINAN
 ```
+## Licença
+
+Este projeto está licenciado sob a licença Creative Commons Attribution 4.0 International (CC BY 4.0).
+
+Isso permite o compartilhamento e adaptação do material, desde que seja dado o devido crédito aos autores.
+
+Mais informações: https://creativecommons.org/licenses/by/4.0/
