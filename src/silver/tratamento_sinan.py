@@ -682,6 +682,86 @@ def padronizar_municipios_para_cruzamento(df):
     return df
 
 
+
+# %%
+def criar_recorte_domestico_familiar(df):
+    """
+    Cria uma coluna de recorte operacional para violência doméstica/familiar.
+
+    O recorte considera casos em que:
+    1. O local de ocorrência é residencial; ou
+    2. Existe vínculo familiar ou afetivo com o provável autor.
+
+    Observação:
+    Esta coluna não substitui a definição jurídica completa da Lei Maria da Penha.
+    Ela funciona como uma aproximação metodológica para análise dentro da base SINAN.
+    """
+
+    # Locais associados ao ambiente doméstico/residencial
+    locais_domesticos = {
+        "RESIDENCIA",
+        "HABITACAO COLETIVA",
+    }
+
+    # Relações familiares ou afetivas com o provável autor
+    colunas_vinculo_domestico_familiar = [
+        "REL_PAI",
+        "REL_MAE",
+        "REL_PAD",
+        "REL_MAD",
+        "REL_CONJ",
+        "REL_EXCON",
+        "REL_NAMO",
+        "REL_EXNAM",
+        "REL_IRMAO",
+        "REL_FILHO",
+    ]
+
+    # Máscara de local doméstico/residencial
+    if "LOCAL_OCOR" in df.columns:
+        mascara_local_domestico = (
+            df["LOCAL_OCOR"]
+            .astype(str)
+            .str.strip()
+            .str.upper()
+            .apply(remover_acentos)
+            .isin(locais_domesticos)
+        )
+    else:
+        mascara_local_domestico = pd.Series(False, index=df.index)
+
+    # Máscara de vínculo familiar ou afetivo
+    mascara_vinculo = pd.Series(False, index=df.index)
+
+    for coluna in colunas_vinculo_domestico_familiar:
+        if coluna in df.columns:
+            mascara_vinculo = (
+                mascara_vinculo |
+                df[coluna]
+                .astype(str)
+                .str.strip()
+                .str.upper()
+                .eq("SIM")
+            )
+
+    # Cria a coluna final do recorte
+    df["RECORTE_DOMESTICO_FAMILIAR"] = "NAO"
+
+    df.loc[
+        mascara_local_domestico | mascara_vinculo,
+        "RECORTE_DOMESTICO_FAMILIAR"
+    ] = "SIM"
+
+    # Posiciona a coluna logo após LOCAL_OCOR, quando essa coluna existir
+    if "LOCAL_OCOR" in df.columns:
+        coluna_recorte = df.pop("RECORTE_DOMESTICO_FAMILIAR")
+        posicao_local = df.columns.get_loc("LOCAL_OCOR")
+        df.insert(posicao_local + 1, "RECORTE_DOMESTICO_FAMILIAR", coluna_recorte)
+
+    # Retorna DataFrame atualizado
+    return df
+
+
 # %%
 def preparar_sinan_para_cruzamento(df):
     """
@@ -928,6 +1008,10 @@ def tratar_sinan():
 
     # Prepara campos necessários para cruzamento com SDS
     df_sinan = preparar_sinan_para_cruzamento(df_sinan)
+
+    # Cria recorte operacional de violência doméstica/familiar no SINAN
+    print("Criando recorte doméstico/familiar...", flush=True)
+    df_sinan = criar_recorte_domestico_familiar(df_sinan)
 
     # Padroniza valores inválidos em todas as colunas finais
     df_sinan = normalizar_dataframe_final(
