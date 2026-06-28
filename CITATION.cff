@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "Se você utilizar este projeto, cite-o conforme indicado."
+title: "Pipeline SINAN/SDS-PE para análise da violência contra a mulher com recorte doméstico em Pernambuco"
+type: software
+
+authors:
+  - family-names: "Hadassa"
+    given-names: "Marcela"
+    affiliation: "Universidade Federal Rural de Pernambuco"
+
+  - family-names: "Aurélio"
+    given-names: "Lucas"
+    affiliation: "Universidade Federal Rural de Pernambuco"
+
+  - family-names: "Vasconcelos"
+    given-names: "Maria"
+    affiliation: "Universidade Federal Rural de Pernambuco"
+
+  - family-names: "Accioly"
+    given-names: "Samara"
+    affiliation: "Universidade Federal Rural de Pernambuco"
+
+  - family-names: "Neves"
+    given-names: "Giovanna"
+    affiliation: "Universidade Federal Rural de Pernambuco"
+
+abstract: "Pipeline de dados para extração, tratamento, integração e análise descritiva de registros de violência contra a mulher em Pernambuco, utilizando bases do SINAN, SDS-PE, IBGE e CNES. O projeto organiza os dados em camadas Bronze, Silver, Gold e Warehouse, com orquestração em Dagster, validações de qualidade, documentação técnica via metadata e análises descritivas em DuckDB."
+
+keywords:
+  - "SINAN"
+  - "SDS-PE"
+  - "violência contra a mulher"
+  - "violência doméstica"
+  - "Dagster"
+  - "DuckDB"
+  - "pipeline de dados"
+  - "Pernambuco"
+
+version: "1.0.0"
+date-released: "2026-06-28"
+license: "CC-BY-4.0"

@@ -1,0 +1,43 @@
+{
+  "title": "Pipeline SINAN/SDS-PE para análise da violência contra a mulher com recorte doméstico em Pernambuco",
+  "upload_type": "software",
+  "description": "Pipeline de dados para extração, tratamento, integração e análise descritiva de registros de violência contra a mulher em Pernambuco, utilizando bases do SINAN, SDS-PE, IBGE e CNES. O projeto organiza os dados em camadas Bronze, Silver, Gold e Warehouse, com orquestração em Dagster, validações de qualidade, documentação técnica via metadata e análises descritivas em DuckDB.",
+  "creators": [
+    {
+      "name": "Hadassa, Marcela",
+        "affiliation": "Universidade Federal Rural de Pernambuco"
+    },
+    {
+      "name": "Aurélio, Lucas",
+        "affiliation": "Universidade Federal Rural de Pernambuco"
+    },
+    {
+      "name": "Vasconcelos, Maria",
+        "affiliation": "Universidade Federal Rural de Pernambuco"
+    },
+    {
+      "name": "Accioly, Samara",
+      "affiliation": "Universidade Federal Rural de Pernambuco"
+    },
+    {
+      "name": "Neves, Giovanna",
+      "affiliation": "Universidade Federal Rural de Pernambuco"
+    }
+  ],
+  "keywords": [
+    "SINAN",
+    "SDS-PE",
+    "violência contra a mulher",
+    "violência doméstica",
+    "Dagster",
+    "DuckDB",
+    "pipeline de dados",
+    "Pernambuco"
+  ],
+  "license": {
+    "id": "cc-by-4.0"
+  },
+  "language": "por",
+  "version": "1.0.0",
+  "access_right": "open"
+}
