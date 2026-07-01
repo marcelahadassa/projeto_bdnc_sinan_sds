@@ -838,6 +838,9 @@ def tratar_sinan():
     # Padroniza sexo para evitar problemas de caixa e espaços
     sexo_padronizado = df["SEXO"].astype(str).str.upper().str.strip()
 
+    # Exibe diagnóstico antes do filtro
+    print(f"Registros antes do filtro PE + sexo feminino: {df.shape[0]}", flush=True)
+
     # Filtra registros de Pernambuco e sexo feminino
     df_sinan = df[
         (estado_notificacao_num == 26) &
@@ -847,6 +850,7 @@ def tratar_sinan():
 
     # Mostra o total após filtro
     print(f"Registros após filtro PE + sexo feminino: {df_sinan.shape[0]}", flush=True)
+    print(f"Colunas selecionadas para tratamento: {df_sinan.shape[1]}", flush=True)
 
     # Mapa de UFs
     uf_map = {
@@ -971,6 +975,9 @@ def tratar_sinan():
     for coluna in colunas_sexuais:
         df_sinan = aplicar_mapa_coluna(df_sinan, coluna, resposta_geral_map)
 
+    # Exibe diagnóstico após tradução das variáveis categóricas
+    print("Mapeamentos categóricos aplicados.", flush=True)
+
     # Cria a coluna de idade interpretada
     print("Aplicando interpretação da idade...", flush=True)
     df_sinan["IDADE_REAL"] = df_sinan["CODIGO_IDADE"].apply(interpretar_idade_formatada)
@@ -1050,6 +1057,33 @@ def tratar_sinan():
     # Exibe resumo final
     print(f"\nBase SINAN tratada salva em: {caminho_saida}", flush=True)
     print(f"Total final: {df_sinan.shape[0]} linhas e {df_sinan.shape[1]} colunas.", flush=True)
+
+    print("\n" + "=" * 80, flush=True)
+    print("RESUMO DO TRATAMENTO SINAN", flush=True)
+    print("=" * 80, flush=True)
+
+    if "NU_ANO" in df_sinan.columns:
+        print(
+            f"Período disponível: {df_sinan['NU_ANO'].min()} - {df_sinan['NU_ANO'].max()}",
+            flush=True
+        )
+
+    if "SEXO" in df_sinan.columns:
+        print("\nValores únicos de SEXO:", flush=True)
+        print(df_sinan["SEXO"].dropna().unique(), flush=True)
+
+    if "FAIXA_ETARIA_SDS" in df_sinan.columns:
+        print("\nValores únicos de FAIXA_ETARIA_SDS:", flush=True)
+        print(df_sinan["FAIXA_ETARIA_SDS"].dropna().unique(), flush=True)
+
+    if "RECORTE_DOMESTICO_FAMILIAR" in df_sinan.columns:
+        print("\nValores únicos de RECORTE_DOMESTICO_FAMILIAR:", flush=True)
+        print(df_sinan["RECORTE_DOMESTICO_FAMILIAR"].dropna().unique(), flush=True)
+
+        print("\nDistribuição do RECORTE_DOMESTICO_FAMILIAR:", flush=True)
+        print(df_sinan["RECORTE_DOMESTICO_FAMILIAR"].value_counts(dropna=False), flush=True)
+
+    print("=" * 80, flush=True)
 
     # Retorna o caminho do arquivo salvo
     return caminho_saida
