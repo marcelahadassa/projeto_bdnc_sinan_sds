@@ -484,13 +484,97 @@ salvar_csv(df_tipos_violencia, "07_discrepancia_por_tipo_violencia_2015_2024.csv
 
 
 # %%
-plt.figure(figsize=(8, 5))
-plt.bar(df_tipos_violencia["tipo_violencia"], df_tipos_violencia["diferenca_sds_menos_sinan"])
-plt.title(f"Diferença SDS - SINAN por tipo de violência ({ANO_INICIO}-{ANO_FIM})")
-plt.xlabel("Tipo de violência")
-plt.ylabel("SDS - SINAN")
-plt.xticks(rotation=45)
-plt.grid(axis="y")
+# Gráfico 5 mais intuitivo: barras horizontais divergentes
+df_grafico_tipos = df_tipos_violencia.copy()
+
+# Nomes mais legíveis para o artigo
+mapa_nomes_tipos = {
+    "VIOL_PSICO": "Violência psicológica",
+    "VIOL_FISIC": "Violência física",
+    "VIOL_FINAN": "Violência financeira",
+    "VIOL_SEXU": "Violência sexual",
+}
+
+df_grafico_tipos["tipo_violencia_legivel"] = (
+    df_grafico_tipos["tipo_violencia"]
+    .map(mapa_nomes_tipos)
+    .fillna(df_grafico_tipos["tipo_violencia"])
+)
+
+# Ordena pela diferença para facilitar a leitura
+df_grafico_tipos = df_grafico_tipos.sort_values(
+    "diferenca_sds_menos_sinan",
+    ascending=True
+)
+
+plt.figure(figsize=(10, 6))
+
+# Cores diferentes para indicar o sentido da diferença
+cores = [
+    "#1f77b4" if valor >= 0 else "#d62728"
+    for valor in df_grafico_tipos["diferenca_sds_menos_sinan"]
+]
+
+barras = plt.barh(
+    df_grafico_tipos["tipo_violencia_legivel"],
+    df_grafico_tipos["diferenca_sds_menos_sinan"],
+    color=cores
+)
+
+# Linha central: separa quando SDS é maior e quando SINAN é maior
+plt.axvline(0, color="black", linewidth=1)
+
+plt.title(
+    f"Diferença de registros entre SDS e SINAN por tipo de violência ({ANO_INICIO}-{ANO_FIM})"
+)
+plt.xlabel("Diferença de registros (SDS - SINAN)")
+plt.ylabel("Tipo de violência")
+plt.grid(axis="x", alpha=0.4)
+
+# Ajusta margem do eixo X para caberem os rótulos
+maior_abs = df_grafico_tipos["diferenca_sds_menos_sinan"].abs().max()
+margem = maior_abs * 0.18
+
+plt.xlim(
+    df_grafico_tipos["diferenca_sds_menos_sinan"].min() - margem,
+    df_grafico_tipos["diferenca_sds_menos_sinan"].max() + margem
+)
+
+# Adiciona os valores exatos nas barras
+for barra in barras:
+    valor = barra.get_width()
+
+    # Formata o número no padrão brasileiro: 219.901
+    valor_formatado = f"{valor:,.0f}".replace(",", ".")
+
+    if valor > 0:
+        texto_rotulo = f"+{valor_formatado}"
+        posicao_x = valor + maior_abs * 0.02
+        alinhamento = "left"
+    else:
+        texto_rotulo = valor_formatado
+        posicao_x = valor - maior_abs * 0.02
+        alinhamento = "right"
+
+    plt.text(
+        posicao_x,
+        barra.get_y() + barra.get_height() / 2,
+        texto_rotulo,
+        va="center",
+        ha=alinhamento,
+        fontsize=10,
+        fontweight="bold"
+    )
+
+# Legenda explicativa abaixo da figura
+plt.figtext(
+    0.5,
+    -0.02,
+    "Valores positivos indicam maior volume na SDS; valores negativos indicam maior volume no SINAN.",
+    ha="center",
+    fontsize=10
+)
+
 salvar_grafico("grafico_05_discrepancia_por_tipo_violencia_2015_2024.png")
 
 
