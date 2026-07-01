@@ -39,6 +39,8 @@ from src.quality.data_quality_check import (
 from src.orchestration.asset_metadata import (
     SILVER_SINAN_METADATA,
     SILVER_SDS_METADATA,
+    SILVER_IBGE_METADATA,
+    SILVER_CNES_METADATA,
     GOLD_SDS_SINAN_METADATA,
     DUCKDB_WAREHOUSE_METADATA,
 )
@@ -215,7 +217,8 @@ def bronze_validacao(context: dg.AssetExecutionContext):
 @dg.asset(
     deps=[bronze_validacao],
     group_name="silver",
-    description="Trata a base IBGE e gera municípios padronizados."
+    description="Trata a base IBGE e gera municípios padronizados.",
+    metadata=SILVER_IBGE_METADATA,
 )
 def silver_ibge(context: dg.AssetExecutionContext):
     saida = executar_modulo_python("src.silver.tratamento_ibge")
@@ -227,7 +230,8 @@ def silver_ibge(context: dg.AssetExecutionContext):
 @dg.asset(
     deps=[bronze_validacao],
     group_name="silver",
-    description="Trata a base CNES e gera unidades padronizadas."
+    description="Trata a base CNES e gera unidades padronizadas.",
+    metadata=SILVER_CNES_METADATA,
 )
 def silver_cnes(context: dg.AssetExecutionContext):
     saida = executar_modulo_python("src.silver.tratamento_cnes")
