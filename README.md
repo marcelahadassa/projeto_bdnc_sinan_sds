@@ -272,10 +272,8 @@ data/gold/sds_sinan/sds_sinan_final.parquet
 data/warehouse/sinan_sds.duckdb
 ```
 
-Após a publicação, o DOI do Zenodo deverá ser incluído nesta seção:
-
 ```text
-DOI: [a preencher após publicação no Zenodo]
+DOI: 10.5281/zenodo.21113070
 ```
 
 A versão publicada no Zenodo corresponde ao release estável do projeto. Assim, alterações posteriores no código, nos dados ou nas análises devem ser documentadas em uma nova versão.
@@ -284,13 +282,9 @@ A versão publicada no Zenodo corresponde ao release estável do projeto. Assim,
 
 Caso utilize este projeto, cite a versão publicada no Zenodo e o repositório associado.
 
-Exemplo provisório, antes da publicação do DOI:
-
 ```text
 Hadassa, M.; Aurelio, L.; Vasconcelos, M.; Accioly, S.; Neves, G. ViolênciaDataPE: Dataset Integrado de Violência Doméstica/Familiar contra a Mulher em Pernambuco. Versão 1.0.0.
 ```
-
-DOI: a preencher após publicação no Zenodo
 
 ## Cuidados com dados sensíveis
 
